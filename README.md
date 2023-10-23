@@ -18,6 +18,11 @@ python -m venv .venv
 Windows: c:\>venv\Scripts\activate
 pip install -r requirements.txt
 
+Crie um arquivo .env dentro das pasta core e coloque as informações abaixo:
+DEBUG=True
+SECRET_KEY=
+
+
 python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
