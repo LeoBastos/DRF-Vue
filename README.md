@@ -18,7 +18,7 @@ python -m venv .venv
 Windows: c:\>venv\Scripts\activate
 pip install -r requirements.txt
 
-Crie um arquivo .env dentro das pasta core e coloque as informações abaixo:
+Crie um arquivo .env dentro das pasta core e coloque as informações abaixo:  (https://django-environ.readthedocs.io/)
 DEBUG=True
 SECRET_KEY=
 
