@@ -10,7 +10,7 @@
 ```
 git clone https://github.com/LeoBastos/DRF-Vue.git
 
-## backend
+## backend:
 entre no diretório backend do projeto:
 c:\> cd backend
 
@@ -22,13 +22,15 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
 
-## frontend
+## frontend:
 c:\> cd frontend
 c:\>frontend> npm install
 c:\> npm run dev
 
+## Links:
+Admin Django: http://127.0.0.1:8000/admin
+Api Swagger: http://127.0.0.1:8000/api/swagger
 
 ```
 
-Admin Django: http://127.0.0.1:8000/admin
-Api Swagger: http://127.0.0.1:8000/api/swagger
+
