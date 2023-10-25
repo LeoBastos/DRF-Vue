@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "alpinejs": "^3.13.2",
     "axios": "^1.5.1",
     "date-fns": "^2.30.0",
     "pinia": "^2.1.7",

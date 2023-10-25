@@ -17,8 +17,6 @@ export const useUserStore = defineStore({
 
     actions: {
         initStore() {
-            console.log('initStore', localStorage.getItem('user.access'))
-
             if (localStorage.getItem('user.access')) {
                 this.user.access = localStorage.getItem('user.access')
                 this.user.refresh = localStorage.getItem('user.refresh')
@@ -28,34 +26,25 @@ export const useUserStore = defineStore({
                 this.user.isAuthenticated = true
 
                 this.refreshToken()
-
-                console.log('iniciando user:', this.user)
             }
         },
 
         setToken(data) {
-            console.log('setToken', data)
-
             this.user.access = data.access
             this.user.refresh = data.refresh
             this.user.isAuthenticated = true
 
             localStorage.setItem('user.access', data.access)
             localStorage.setItem('user.refresh', data.refresh)
-
-            console.log('user.access: ', localStorage.getItem('user.access'))
         },
 
         removeToken() {
-            console.log('removeToken')
-
             this.user.refresh = null
             this.user.access = null
             this.user.isAuthenticated = false
             this.user.id = null
             this.user.name = null
             this.user.email = null
-           
 
             localStorage.setItem('user.access', '')
             localStorage.setItem('user.refresh', '')

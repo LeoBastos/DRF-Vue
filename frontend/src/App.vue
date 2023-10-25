@@ -8,7 +8,7 @@
 
 <script>
     import axios from 'axios'
-    import TheHeader from './components/TheHeader.vue';
+    import TheHeader from '@/components/TheHeader.vue';
     import { useUserStore } from '@/stores/user'
 
     export default {
@@ -35,5 +35,7 @@
                 axios.defaults.headers.common["Authorization"] = "";
             }
         }
+
+        
     }
 </script>
