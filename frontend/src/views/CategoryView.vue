@@ -38,7 +38,6 @@
 
   </section>
 
-
   <!------------FORM----------------->
   <section class="max-w-4xl  p-6 mt-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
     <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white">Cadastrar Categoria</h2>
@@ -59,9 +58,30 @@
     </form>
   </section>
 
+
   <!------------TABLE----------------->
   <section class="container px-4 py-6 mx-auto">
-    <h2 class="text-lg font-medium text-gray-800 dark:text-white">Categorias</h2>
+   
+  
+    <div class="mt-6 md:flex md:items-center md:justify-between">
+      <h2 class="text-lg font-medium text-gray-800 dark:text-white">Categorias</h2>
+
+      <div class="relative flex items-center mt-4 md:mt-0">
+        <span class="absolute">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="w-5 h-5 mx-3 text-gray-400 dark:text-gray-600">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+        </span>
+
+        <input type="text" placeholder="Search"
+          class="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
+      </div>
+    </div>
+
+
+
     <div class="flex flex-col mt-6">
       <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -137,7 +157,7 @@
   <section>
     <TheModal :show="showModal" @close="closeModal">
       <template #header>
-        <h3 class="text-lg font-medium leading-6 text-gray-800 capitalize dark:text-white" id="modal-title">
+        <h3 class="text-lg font-medium leading-6 text-gray-800  dark:text-white" id="modal-title">
           Detalhes da Categoria
         </h3>
       </template>
@@ -168,7 +188,9 @@
         </div>
       </template>
       <template #footer>
-        <button class="modal-default-button" @click="closeModal">Fechar</button>
+        <button
+          class="modal-default-button px-8 py-2.5 leading-5 text-sm text-gray-800 transition-colors duration-200  border rounded-lg sm:w-auto dark:hover:bg-gray-600  hover:bg-gray-100 dark:text-white dark:border-gray-700"
+          @click="closeModal">Fechar</button>
       </template>
     </TheModal>
   </section>
@@ -307,7 +329,7 @@ export default {
       this.selectedCategory = {};
       this.showModal = false;
     },
-    // #TODO refatorar para componente e utilizar global store
+    // #TODO refatorar Message e modal para componente e utilizar global store
     setTimers() {
       setTimeout(() => {
         this.errorMessage = null;

@@ -1,16 +1,17 @@
 <script>
 export default {
-  props: {
-    show: Boolean
-  }
+    props: {
+        show: Boolean
+    }
 }
 </script>
 
 
 <template>
     <Transition name="modal ">
+
         <div v-if="show" class="modal-mask ">
-            <div class="modal-container ">
+            <div class="modal-container">
                 <div class="modal-header">
                     <slot name="header">default header</slot>
                 </div>
@@ -27,6 +28,7 @@ export default {
                 </div>
             </div>
         </div>
+
     </Transition>
 </template>
 
@@ -44,7 +46,7 @@ export default {
 }
 
 .modal-container {
-    width: 750px;
+    width: 1280px;
     height: auto;
     margin: auto;
     padding: 20px 30px;
@@ -66,7 +68,7 @@ export default {
 
 .modal-default-button {
     float: right;
-    color: #fff;
+    
 }
 
 /*

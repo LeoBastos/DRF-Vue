@@ -4,6 +4,7 @@ import ProductView from '../views/ProductView.vue'
 import CategoryView from '../views/CategoryView.vue'
 import SuplierView from '../views/SuplierView.vue'
 import LoginView from '../views/LoginView.vue'
+import FormSuplier from '../components/TheFormSuplier.vue'
 
 
 
@@ -28,7 +29,12 @@ const router = createRouter({
     {
       path: '/suplier',
       name: 'fornecedores',      
-      component: SuplierView
+      component: SuplierView,     
+    },
+    {
+      path: '/suplier/add',
+      name: 'cadastro-fornecedor',
+      component: FormSuplier
     },
     {
       path: '/login',

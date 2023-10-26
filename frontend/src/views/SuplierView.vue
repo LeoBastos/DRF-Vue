@@ -1,4 +1,5 @@
 <template>
+  <!------------ALERT----------------->
   <section>
     <div v-if="errorMessage"
       class="flex items-center w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 absolute right-0">
@@ -36,93 +37,38 @@
 
   </section>
 
-  <section class="max-w-6xl  p-6 mt-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
-    <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white">Cadastrar Fornecedor</h2>
-
-    <form v-on:submit.prevent="submitForm" method="post">
-      <div class="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-4">
-        <div>
-          <label class="text-gray-700 dark:text-gray-200" for="username">Nome Fantasia</label>
-          <input id="name" type="text" v-model="name"
-            class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
-        </div>
-
-        <div>
-          <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Razão Social</label>
-          <input id="comapany" type="text" v-model="company_name"
-            class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
-        </div>
-
-        <div>
-          <label class="text-gray-700 dark:text-gray-200" for="password">Cnpj</label>
-          <input id="text" type="text" v-model="document" maxlength="14"
-            class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
-        </div>
-
-        <div>
-          <label class="text-gray-700 dark:text-gray-200" for="contact">Telefones</label>
-          <div v-for="(contact, index) in contacts" :key="index">
-            <input type="text" v-model="contacts[index].contact" maxlength="11"
-              class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring" />
-            <button @click="removeContactField(index)" class="text-gray-700 dark:text-gray-200">Remover</button>
-          </div>
-          <button @click.prevent="addContactField" class="text-gray-700 dark:text-gray-200">Adicionar Telefone</button>
-        </div>
-
-        <div>
-          <label class="text-gray-700 dark:text-gray-200" for="passwordConfirmation">Cep</label>
-          <input id="a" type="text" v-model="zipcode" maxlength="8"
-            class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
-        </div>
-        <div>
-          <label class="text-gray-700 dark:text-gray-200" for="username">Rua</label>
-          <input id="username" type="text" v-model="street"
-            class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
-        </div>
-
-        <div>
-          <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Numero</label>
-          <input id="emailAddress" type="number" v-model="number"
-            class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
-        </div>
-
-        <div>
-          <label class="text-gray-700 dark:text-gray-200" for="password">Complemento</label>
-          <input id="password" type="text" v-model="complement"
-            class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
-        </div>
-
-        <div>
-          <label class="text-gray-700 dark:text-gray-200" for="passwordConfirmation">Bairro</label>
-          <input id="passwordConfirmation" type="text" v-model="neighborhood"
-            class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
-        </div>
-        <div>
-          <label class="text-gray-700 dark:text-gray-200" for="username">Cidade</label>
-          <input id="username" type="text" v-model="city"
-            class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
-        </div>
-
-        <div>
-          <label class="text-gray-700 dark:text-gray-200" for="emailAddress">Estado</label>
-          <input id="emailAddress" type="text" v-model="state"
-            class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
-        </div>
+  <!------------FORM----------------->  
+  <template>
+    <FormSuplier :suplierData="suplier" />
+  </template>
 
 
-
-
-      </div>
-
-      <div class="flex justify-start mt-6">
-        <button
-          class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">Cadastrar</button>
-      </div>
-    </form>
-  </section>
-
+  <!------------TABELA----------------->
   <section class="container px-4 py-6 mx-auto">
     <h2 class="text-lg font-medium text-gray-800 dark:text-white">Fornecedores</h2>
+    <div class="mt-6 md:flex md:items-center md:justify-between">
+      <div
+        class="inline-flex overflow-hidden bg-white border divide-x rounded-lg dark:bg-gray-900 rtl:flex-row-reverse dark:border-gray-700 dark:divide-gray-700">
+        <RouterLink to="/suplier/add"
+          class="px-5 py-2 text-xs font-medium text-gray-600 transition-colors duration-200 bg-gray-100 sm:text-sm dark:bg-gray-800 dark:text-gray-300">
+          Cadastrar Fornecedor
+        </RouterLink>
+      </div>
+
+      <div class="relative flex items-center mt-4 md:mt-0">
+        <span class="absolute">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="w-5 h-5 mx-3 text-gray-400 dark:text-gray-600">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+        </span>
+
+        <input type="text" placeholder="Search"
+          class="block w-full py-1.5 pr-5 text-gray-700 bg-white border border-gray-200 rounded-lg md:w-80 placeholder-gray-400/70 pl-11 rtl:pr-11 rtl:pl-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40">
+      </div>
+    </div>
+
     <div class="flex flex-col mt-6">
       <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -133,7 +79,21 @@
                 <tr>
                   <th scope="col"
                     class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    Nome Fantasia
+                    <button class="flex items-center gap-x-3 focus:outline-none">
+                      <span>Nome Fantasia</span>
+
+                      <svg class="h-3" viewBox="0 0 10 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M2.13347 0.0999756H2.98516L5.01902 4.79058H3.86226L3.45549 3.79907H1.63772L1.24366 4.79058H0.0996094L2.13347 0.0999756ZM2.54025 1.46012L1.96822 2.92196H3.11227L2.54025 1.46012Z"
+                          fill="currentColor" stroke="currentColor" stroke-width="0.1" />
+                        <path
+                          d="M0.722656 9.60832L3.09974 6.78633H0.811638V5.87109H4.35819V6.78633L2.01925 9.60832H4.43446V10.5617H0.722656V9.60832Z"
+                          fill="currentColor" stroke="currentColor" stroke-width="0.1" />
+                        <path
+                          d="M8.45558 7.25664V7.40664H8.60558H9.66065C9.72481 7.40664 9.74667 7.42274 9.75141 7.42691C9.75148 7.42808 9.75146 7.42993 9.75116 7.43262C9.75001 7.44265 9.74458 7.46304 9.72525 7.49314C9.72522 7.4932 9.72518 7.49326 9.72514 7.49332L7.86959 10.3529L7.86924 10.3534C7.83227 10.4109 7.79863 10.418 7.78568 10.418C7.77272 10.418 7.73908 10.4109 7.70211 10.3534L7.70177 10.3529L5.84621 7.49332C5.84617 7.49325 5.84612 7.49318 5.84608 7.49311C5.82677 7.46302 5.82135 7.44264 5.8202 7.43262C5.81989 7.42993 5.81987 7.42808 5.81994 7.42691C5.82469 7.42274 5.84655 7.40664 5.91071 7.40664H6.96578H7.11578V7.25664V0.633865C7.11578 0.42434 7.29014 0.249976 7.49967 0.249976H8.07169C8.28121 0.249976 8.45558 0.42434 8.45558 0.633865V7.25664Z"
+                          fill="currentColor" stroke="currentColor" stroke-width="0.3" />
+                      </svg>
+                    </button>
                   </th>
 
                   <th scope="col"
@@ -185,9 +145,12 @@
 
                   <td class="px-4 py-4 text-sm whitespace-nowrap">
                     <div class="flex items-center sm:gap-x-5">
-                      <a href="#" @click="editSuplier(suplier)">
-                        <h2 class="font-medium text-gray-800 dark:text-white ">Editar</h2>
+                      <a href="#" @click="openModal(suplier)">
+                        <h2 class="font-medium text-gray-800 dark:text-white ">Detalhes</h2>
                       </a>
+                      <button @click="editSuplier(suplier)">
+                        <h2 class="font-medium text-gray-800 dark:text-white ">Editar</h2>
+                      </button>
                       <a href="#" @click="deleteSuplier(suplier.id)">
                         <h2 class="font-medium text-gray-800 dark:text-white ">Excluir</h2>
                       </a>
@@ -202,14 +165,108 @@
       </div>
     </div>
   </section>
+
+  <!------------MODAL DETAIL----------------->
+  <section>
+    <TheModal :show="showModal" @close="closeModal">
+      <template #header>
+        <h3 class="text-lg font-medium leading-6 text-gray-800 dark:text-white" id="modal-title">
+          Detalhes do Fornecedor
+        </h3>
+      </template>
+      <template #body>
+        <div class="grid grid-cols-4 gap-6 mt-4">
+          <div>
+            <label class="text-gray-700 dark:text-gray-200" for="suplier_id">Id</label>
+            <input id="suplier_id" type="text" disabled v-model="selectedSuplier.id"
+              class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+          </div>
+          <div>
+            <label class="text-gray-700 dark:text-gray-200" for="name">Nome Fantasia</label>
+            <input id="id_name" type="text" disabled v-model="selectedSuplier.name"
+              class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+          </div>
+
+          <div>
+            <label class="text-gray-700 dark:text-gray-200" for="id_company">Razão Social</label>
+            <input id="id_company" type="text" disabled v-model="selectedSuplier.company_name"
+              class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+          </div>
+
+          <div>
+            <label class="text-gray-700 dark:text-gray-200" for="cnpj">Cnpj</label>
+            <input id="cnpj" type="text" maxlength="14" disabled :value="formatCNPJ(selectedSuplier.document)"
+              class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+          </div>
+          <div>
+            <label class="text-gray-700 dark:text-gray-200" for="Street">Rua</label>
+            <input id="Street" type="text" disabled v-model="selectedSuplier.name"
+              class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+          </div>
+
+          <div>
+            <label class="text-gray-700 dark:text-gray-200" for="number">Número</label>
+            <input id="number" type="text" disabled v-model="selectedSuplier.number"
+              class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+          </div>
+
+          <div>
+            <label class="text-gray-700 dark:text-gray-200" for="complement">Complemento</label>
+            <input id="complement" type="text" disabled v-model="selectedSuplier.complement"
+              class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+          </div>
+
+          <div>
+            <label class="text-gray-700 dark:text-gray-200" for="neighborhood">Bairro</label>
+            <input id="neighborhood" type="text" disabled v-model="selectedSuplier.neighborhood"
+              class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+          </div>
+
+          <div>
+            <label class="text-gray-700 dark:text-gray-200" for="city">Cidade</label>
+            <input id="city" type="text" disabled v-model="selectedSuplier.city"
+              class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+          </div>
+
+          <div>
+            <label class="text-gray-700 dark:text-gray-200" for="state">Estado</label>
+            <input id="state" type="text" disabled v-model="selectedSuplier.state"
+              class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+          </div>
+
+          <div>
+            <label class="text-gray-700 dark:text-gray-200" for="contact">Telefones</label>
+            <div v-for="contact in formattedContacts" :key="contact">
+              <input id="contact" type="text" maxlength="14" disabled :value="contact"
+                class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+            </div>
+          </div>
+
+        </div>
+      </template>
+      <template #footer>
+        <button
+          class="modal-default-button px-8 py-2.5 leading-5 text-sm text-gray-800 transition-colors duration-200  border rounded-lg sm:w-auto dark:hover:bg-gray-600  hover:bg-gray-100 dark:text-white dark:border-gray-700"
+          @click="closeModal">Fechar</button>
+      </template>
+    </TheModal>
+  </section>
+  
 </template>
   
 
 <script>
 import axios from 'axios';
+import FormSuplier from "@/components/TheFormSuplier.vue";
+import { useSuplierStore } from '@/stores/suplierStore';
+import TheModal from '@/components/TheModal.vue';
 
 export default {
   name: 'SuplierView',
+  components: {
+    FormSuplier,
+    TheModal,
+  },
   data() {
     return {
       supliers: [],
@@ -227,16 +284,24 @@ export default {
       state: '',
       successMessage: '',
       errorMessage: '',
+      showModal: false,
       editingSuplierId: null,
       editingSuplier: {},
+      selectedSuplier: {}
     };
   },
-  components: {},
-
+  setup() {
+    const suplierStore = useSuplierStore();
+    return { suplierStore };
+  },
   mounted() {
     this.getSuplier();
   },
-
+  computed: {
+    formattedContacts() {
+      return this.selectedSuplier.contacts.map(contact => this.formatContact(contact.toString()));
+    }
+  },
   methods: {
     getSuplier() {
       axios.get('/api/fornecedores/')
@@ -248,137 +313,35 @@ export default {
         });
     },
 
-    addSuplier() {
-      axios.post('/api/fornecedores/', {
-        name: this.name,
-        company_name: this.company_name,
-        document: this.document,
-        zipcode: this.zipcode,
-        street: this.street,
-        number: this.number,
-        complement: this.complement,
-        neighborhood: this.neighborhood,
-        city: this.city,
-        state: this.state,
-        contacts: this.contacts
-      })
-        .then(response => {
-          this.successMessage = 'Suplier added successfully';
-          this.name = '';
-          this.getSuplier();
-
-        })
-        .catch(error => {
-          this.errorMessage = 'Error adding suplier';
-          console.error('Error adding suplier', error);
-        });
-    },
-
-    updateSuplier(id, updatedSuplier) {
-      axios.put(`/api/fornecedores/${id}/`, updatedSuplier)
-        .then(response => {
-          console.log(response.data)
-          this.successMessage = 'Suplier updated successfully';
-          this.name = '';
-          this.company_name = '';
-          this.document = '';
-          this.zipcode = '';
-          this.street = '';
-          this.number = '';
-          this.complement = '';
-          this.neighborhood = '';
-          this.city = '';
-          this.state = '';
-          this.contacts = '';
-          this.getSuplier();
-          this.cancelEdit()
-
-        })
-        .catch(error => {
-          this.errorMessage = 'Error updating suplier';
-          console.error('Error updating suplier', error);
-        });
-    },
-
-    editSuplier(suplier) {
-      this.editingSuplierId = suplier.id;
-      this.editingSuplier = { ...suplier };
-      this.name = suplier.name;
-      this.company_name = suplier.company_name;
-      this.document = suplier.document;
-      this.zipcode = suplier.zipcode;
-      this.street = suplier.street;
-      this.number = suplier.number;
-      this.complement = suplier.complement;
-      this.neighborhood = suplier.neighborhood;
-      this.city = suplier.city;
-      this.state = suplier.state;
-      if (suplier.contacts) {
-        this.contacts = suplier.contacts.map(contact => ({ contact: contact.contact }));
-      } else {
-        this.contacts = [{ contact: '' }];
-      }
-
-    },
-
-    cancelEdit() {
-      this.editingSuplierId = null;
-      this.editingSuplier = {};
-      this.name = '';
-      this.company_name = '';
-      this.document = '';
-      this.zipcode = '';
-      this.street = '';
-      this.number = '';
-      this.complement = '';
-      this.neighborhood = '';
-      this.city = '';
-      this.state = '';
-      this.contacts = [{ contact: '' }]
-    },
-
-
     deleteSuplier(id) {
       axios.delete(`/api/fornecedores/${id}/`)
         .then(response => {
-          this.successMessage = 'Suplier deleted successfully';
+          this.successMessage = 'Fornecedor deletado com sucesso';
           this.getSuplier();
         })
         .catch(error => {
-          this.errorMessage = 'Error deleting suplier';
+          this.errorMessage = 'Erro ao deletar fornecedor';
           console.error('Error deleting suplier', error);
         });
     },
 
-    addContactField() {
-      const newContact = {
-        contact: '',
+    editSuplier(suplier) {
+      this.suplierStore.setSuplierData(suplier);
+      this.$router.push({
+        name: 'cadastro-fornecedor',
+      });
+    },
+
+    openModal(suplier) {
+      this.selectedSuplier = {
+        ...suplier,
       };
-      this.contacts.push(newContact);
+      this.showModal = true;
     },
 
-    removeContactField(index) {
-      this.contacts.splice(index, 1);
-    },
-
-    submitForm() {
-      if (this.editingSuplierId) {
-        this.updateSuplier(this.editingSuplierId, {
-          name: this.name,
-          company_name: this.company_name,
-          document: this.document,
-          zipcode: this.zipcode,
-          street: this.street,
-          number: this.number,
-          complement: this.complement,
-          neighborhood: this.neighborhood,
-          city: this.city,
-          state: this.state,
-          contacts: this.contacts.map(contact => ({ contact: contact.contact }))
-           });
-      } else {
-        this.addSuplier();
-      }
+    closeModal() {
+      this.selectedSuplier = {};
+      this.showModal = false;
     },
 
     formatContact(contact) {
@@ -393,7 +356,9 @@ export default {
       if (cnpj.length === 14) {
         return `${cnpj.slice(0, 2)}.${cnpj.slice(2, 5)}.${cnpj.slice(5, 8)}/${cnpj.slice(8, 12)}-${cnpj.slice(12)}`;
       }
-    },
+    }
+
   },
 };
 </script>
+
