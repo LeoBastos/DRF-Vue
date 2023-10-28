@@ -1,4 +1,5 @@
 <template>
+  <!------------FORM----------------->
   <section class="max-w-6xl  p-6 mt-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
     <h2 class="text-lg font-semibold text-gray-700 capitalize dark:text-white">Cadastrar Produto</h2>
 
@@ -13,8 +14,8 @@
           <label class="text-gray-700 dark:text-gray-200" for="category">Categoria</label>
           <select v-model="selectedCategory" id="category" @change="categoryChanged"
             class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
-            <option v-for="product in products" :value="product.id" :key="product.id">
-              {{ product.category.name }}
+            <option v-for="category in categories" :value="category.id" :key="category.id">
+              {{ category.name }}
             </option>
           </select>
         </div>
@@ -22,8 +23,8 @@
           <label class="text-gray-700 dark:text-gray-200" for="suplier">Fornecedor</label>
           <select v-model="selectedSuplier" id="suplier"
             class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
-            <option v-for="suplier in supliers" :value="suplier.id" :key="suplier.id">
-              {{ suplier.name }}
+            <option v-for="suplier in supliers" :value="suplier ? suplier.id : ''" :key="suplier ? suplier.id : ''">
+              {{ suplier ? suplier.name : '' }}
             </option>
           </select>
         </div>
@@ -50,6 +51,7 @@
     </form>
   </section>
 
+  <!------------TABLE----------------->
   <section class="container px-4 py-6 mx-auto">
     <h2 class="text-lg font-medium text-gray-800 dark:text-white">Produtos</h2>
     <div class="flex flex-col mt-6">
@@ -136,22 +138,35 @@
         </div>
       </div>
     </div>
+
+    <div>
+      <Pagination :current-page="currentPage" :total-pages="totalPages" :next="next" :previous="previous"
+        @change-page="loadPage" />
+    </div>
   </section>
 </template>
 
 
 <script>
 import axios from 'axios';
+import Pagination from '@/components/ThePagination.vue';
 
 export default {
   name: 'ProductView',
   data() {
     return {
+      baseURL: '/api/produtos/',
+      baseURLCategory: '/api/categorias/',
+      baseURLSuplier: '/api/fornecedores/',
+      next: null,
+      previous: null,
+      totalPages: 10,
+      currentPage: 1,
       products: [],
+      supliers: [],
       name: '',
       description: '',
       category: '',
-      supliers: [],
       successMessage: '',
       errorMessage: '',
       editingProductId: null,
@@ -166,47 +181,59 @@ export default {
       return selectedProduct ? selectedProduct.suplierproducts : [];
     }
   },
-  components: {},
+  components: {
+    Pagination,
+  },
 
   mounted() {
-    this.getProduct();
-    this.getCategory();
-    this.getSupliers();
+    this.getCategory(this.baseURLCategory);
+    this.getSuplier(this.baseURLSuplier);
+    this.getProduct(this.baseURL);
+   
   },
 
   methods: {
-    getCategory() {
-      axios.get('/api/categorias/')
-        .then(response => {
-          this.categories = response.data;
+    async getCategory(url) {
+      await axios.get(url)
+        .then(response => {         
+          this.categories = response.data.results;
         })
         .catch(error => {
           console.error('Error fetching categories', error);
         });
     },
 
-    getProduct() {
-      axios.get('/api/produtos/')
+    async getProduct(url) {
+      await axios.get(url)
         .then(response => {
-          this.products = response.data;
+          this.products = response.data.results;
+          this.next = response.data.next;
+          this.previous = response.data.previous;
+          this.totalPages = response.data.total_pages;
         })
         .catch(error => {
           console.error('Error fetching products', error);
         });
     },
 
-    getSupliers() {
-      axios.get('/api/fornecedores/')
+    async getSuplier(url) {
+      await axios.get(url)
         .then(response => {
-          this.supliers = response.data;
+          this.supliers = response.data.results;
         })
         .catch(error => {
           console.error('Error fetching supliers', error);
         });
     },
 
-    addProduct() {
-      axios.post('/api/produtos/', {
+    loadPage(page) {
+      this.currentPage = page;
+      const url = `${this.baseURL}?page=${page}`;
+      this.getSuplier(url);
+    },
+
+    async addProduct() {
+      await axios.post(this.baseURL, {
         name: this.name,
         description: this.description,
         category: this.category,
@@ -215,7 +242,7 @@ export default {
         .then(response => {
           this.successMessage = 'Product added successfully';
           this.name = '';
-          this.getProduct();
+          this.getProduct(this.baseURL);
 
         })
         .catch(error => {
@@ -224,12 +251,12 @@ export default {
         });
     },
 
-    updateProduct(id, updatedProduct) {
-      axios.put(`/api/produtos/${id}/`, updatedProduct)
+    async updateProduct(id, updatedProduct) {
+      await axios.put(`${this.baseURL}${id}/`, updatedProduct)
         .then(response => {
           this.successMessage = 'Product updated successfully';
           this.name = '';
-          this.getProduct();
+          this.getProduct(this.baseURL);
           this.cancelEdit()
 
         })
@@ -239,11 +266,11 @@ export default {
         });
     },
 
-    deleteProduct(id) {
-      axios.delete(`/api/produtos/${id}/`)
+    async deleteCategory(id) {
+      await axios.delete(`${this.baseURL}${id}/`)
         .then(response => {
           this.successMessage = 'Product deleted successfully';
-          this.getProduct();
+          this.getProduct(this.baseURL);
         })
         .catch(error => {
           this.errorMessage = 'Error deleting product';
@@ -253,12 +280,13 @@ export default {
 
     editProduct(product) {
       this.editingProductId = product.id;
-      this.editingProduct = { ...product };   
+      this.editingProduct = { ...product };
       this.name = product.name;
       this.description = product.description;
       this.category = product.category;
       this.supliers = product.suplier;
     },
+
     cancelEdit() {
       this.editingProductId = null;
       this.editingProduct = {};
@@ -274,8 +302,8 @@ export default {
 
     submitForm() {
       if (this.editingProductId) {
-        this.updateProduct(this.editingProductId, { 
-          name: this.name,         
+        this.updateProduct(this.editingProductId, {
+          name: this.name,
           description: this.description,
           category: this.category,
           supliers: this.suplier,

@@ -37,7 +37,7 @@
 
   </section>
 
-  <!------------FORM----------------->  
+  <!------------FORM----------------->
   <template>
     <FormSuplier :suplierData="suplier" />
   </template>
@@ -164,6 +164,11 @@
         </div>
       </div>
     </div>
+
+    <div>
+      <Pagination :current-page="currentPage" :total-pages="totalPages" :next="next" :previous="previous"
+        @change-page="loadPage" />
+    </div>
   </section>
 
   <!------------MODAL DETAIL----------------->
@@ -210,9 +215,14 @@
               class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
           </div>
 
-          <div>
+          <div v-if="selectedSuplier.complement">
             <label class="text-gray-700 dark:text-gray-200" for="complement">Complemento</label>
             <input id="complement" type="text" disabled v-model="selectedSuplier.complement"
+              class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+          </div>
+          <div v-else>
+            <label class="text-gray-700 dark:text-gray-200" for="complement">Complemento</label>
+            <input id="complement" type="text" disabled value="N/A"
               class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
           </div>
 
@@ -236,8 +246,8 @@
 
           <div>
             <label class="text-gray-700 dark:text-gray-200" for="contact">Telefones</label>
-            <div v-for="contact in formattedContacts" :key="contact">
-              <input id="contact" type="text" maxlength="14" disabled :value="contact"
+            <div v-for="contact in selectedSuplier.contacts" :key="contact">
+              <input id="contact" type="text" maxlength="14" disabled :value="formatContact(contact.contact)"
                 class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
             </div>
           </div>
@@ -251,7 +261,6 @@
       </template>
     </TheModal>
   </section>
-  
 </template>
   
 
@@ -260,17 +269,24 @@ import axios from 'axios';
 import FormSuplier from "@/components/TheFormSuplier.vue";
 import { useSuplierStore } from '@/stores/suplierStore';
 import TheModal from '@/components/TheModal.vue';
+import Pagination from '@/components/ThePagination.vue';
 
 export default {
   name: 'SuplierView',
   components: {
     FormSuplier,
     TheModal,
+    Pagination,
   },
   data() {
     return {
+      baseURL: '/api/fornecedores/',
       supliers: [],
       contacts: [],
+      next: null,
+      previous: null,
+      totalPages: 10,
+      currentPage: 1,
       contact: '',
       name: '',
       company_name: '',
@@ -295,26 +311,32 @@ export default {
     return { suplierStore };
   },
   mounted() {
-    this.getSuplier();
+    this.getSuplier(this.baseURL);
   },
-  computed: {
-    formattedContacts() {
-      return this.selectedSuplier.contacts.map(contact => this.formatContact(contact.toString()));
-    }
-  },
+
   methods: {
-    getSuplier() {
-      axios.get('/api/fornecedores/')
+
+    async getSuplier(url) {
+      await axios.get(url)
         .then(response => {
-          this.supliers = response.data;
+          this.supliers = response.data.results;
+          this.next = response.data.next;
+          this.previous = response.data.previous;
+          this.totalPages = response.data.total_pages;
         })
         .catch(error => {
           console.error('Error fetching supliers', error);
         });
+    },  
+
+    loadPage(page) {
+      this.currentPage = page;
+      const url = `${this.baseURL}?page=${page}`;
+      this.getSuplier(url);
     },
 
-    deleteSuplier(id) {
-      axios.delete(`/api/fornecedores/${id}/`)
+    async deleteSuplier(id) {
+      await axios.delete(`${this.baseURL}${id}/`)
         .then(response => {
           this.successMessage = 'Fornecedor deletado com sucesso';
           this.getSuplier();

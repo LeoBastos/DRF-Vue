@@ -1,6 +1,6 @@
 <template>
     <section class="bg-white dark:bg-gray-900">
-        <div class="container flex items-center justify-center min-h-screen px-6 mx-auto">
+        <div class="container flex items-center justify-center pt-32 px-6 mx-auto">
             <form class="w-full max-w-md" v-on:submit.prevent="submitForm">
                 <img class="w-auto h-7 sm:h-8" src="https://merakiui.com/images/logo.svg" alt="">
 

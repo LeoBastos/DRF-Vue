@@ -5,6 +5,7 @@ import CategoryView from '../views/CategoryView.vue'
 import SuplierView from '../views/SuplierView.vue'
 import LoginView from '../views/LoginView.vue'
 import FormSuplier from '../components/TheFormSuplier.vue'
+import { useUserStore } from '@/stores/user'
 
 
 
@@ -42,6 +43,16 @@ const router = createRouter({
       component: LoginView
     }    
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore()
+
+  if (to.name !== 'login' && !userStore.user.isAuthenticated) {
+    next({ name: 'login' })
+  } else {
+    next()
+  }
 })
 
 export default router

@@ -56,14 +56,15 @@
 
                 <div>
                     <label class="text-gray-700 dark:text-gray-200" for="password">Cnpj</label>
-                    <input id="text" type="text" v-model="suplierStore.suplierData.document" maxlength="14"
-                        class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+                    <input id="number" type="text" v-model="suplierStore.suplierData.document" @input="handleCNPJInput"
+                        maxlength="14"
+                        class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring" />
                 </div>
 
                 <div>
                     <label for="contact" class="text-gray-700 dark:text-gray-200">Telefones &nbsp &nbsp</label>
                     <div v-for="(contact, index) in suplierStore.suplierData.contacts" :key="index">
-                        <input type="text" v-model="contact.contact" maxlength="11"
+                        <input type="text" v-model="contact.contact" maxlength="11" @input="handleContactInput"
                             class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring" />
                         <button @click="removeContactField(index)" class="text-gray-700 dark:text-gray-200">Remover</button>
                     </div>
@@ -73,7 +74,7 @@
                 <div>
                     <label class="text-gray-700 dark:text-gray-200" for="cep">Cep</label>
                     <input id="zipcode" type="text" v-model="suplierStore.suplierData.zipcode" maxlength="8"
-                        v-on:blur="getCep(this.zipcode)"
+                        @input="handleZipCodeInput" v-on:blur="getCep(this.zipcode)"
                         class="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
                 </div>
                 <div>
@@ -115,12 +116,12 @@
             <div class="flex justify-start space-x-4 mt-6">
                 <button
                     class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">Cadastrar</button>
-                    <RouterLink to="/suplier"
-                    class="px-8 py-2.5 leading-5 text-sm text-gray-800 transition-colors duration-200  border rounded-lg sm:w-auto dark:hover:bg-gray-600  hover:bg-gray-100 dark:text-white dark:border-gray-700">Voltar</RouterLink>
+                <RouterLink to="/suplier"
+                    class="px-8 py-2.5 leading-5 text-sm text-gray-800 transition-colors duration-200  border rounded-lg sm:w-auto dark:hover:bg-gray-600  hover:bg-gray-100 dark:text-white dark:border-gray-700">
+                    Voltar</RouterLink>
             </div>
         </form>
     </section>
-
 </template>
     
 
@@ -171,7 +172,7 @@ export default {
                 console.error('Error adding suplier', error);
             }
         };
-        
+
         const submitForm = () => {
             const suplierData = {
                 name: suplierStore.suplierData.name,
@@ -217,5 +218,27 @@ export default {
             suplierStore,
         };
     },
+    methods: {
+        handleCNPJInput(event) {
+            // Filtrar caracteres não numéricos
+            const formattedCNPJ = event.target.value.replace(/\D/g, '');
+            // Limitar a 14 dígitos
+            this.suplierStore.suplierData.document = formattedCNPJ.slice(0, 14);
+        },
+
+        handleContactInput(event, index) {
+            const contactFormat = event.target.value.replace(/\D/g, '');
+            if (this.suplierStore.suplierData.contacts[index]) {
+                this.suplierStore.suplierData.contacts[index].contact = contactFormat.slice(0, 11);
+            }
+        },
+
+        handleZipCodeInput(event) {
+            // Filtrar caracteres não numéricos
+            const zipcodeFormat = event.target.value.replace(/\D/g, '');
+            // Limitar a 14 dígitos
+            this.suplierStore.suplierData.zipcode = zipcodeFormat.slice(0, 8);
+        },
+    }
 };
 </script>
