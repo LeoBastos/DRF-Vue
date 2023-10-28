@@ -1,6 +1,9 @@
 from rest_framework.viewsets import ModelViewSet
 from apps.utils.pagination import StandardResultsSetPagination
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt import authentication
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import status
 from rest_framework.decorators import action
 from apps.suplier.models import Contact, Suplier, Address
@@ -15,12 +18,15 @@ class AddressViewSet(ModelViewSet):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
 
-
-# TODO : Paginação - Filtros
 class SuplierViewSet(ModelViewSet):
     queryset = Suplier.objects.all()
     serializer_class = SuplierSerializer
+    authentication_classes = (authentication.JWTAuthentication,)
+    permission_classes = (IsAuthenticated,)
     pagination_class = StandardResultsSetPagination
+    filter_backends = [SearchFilter, OrderingFilter]    
+    search_fields =  ['name', 'company_name', 'document', 'contacts__contact']
+    ordering_fields = ['name', 'company_name', 'document',]  
 
     @action(detail=True, methods=['get'])
     def contacts(self, request, pk=None):
