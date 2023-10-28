@@ -1,4 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
+from apps.utils.pagination import StandardResultsSetPagination
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
@@ -19,12 +20,13 @@ class AddressViewSet(ModelViewSet):
 class SuplierViewSet(ModelViewSet):
     queryset = Suplier.objects.all()
     serializer_class = SuplierSerializer
+    pagination_class = StandardResultsSetPagination
 
     @action(detail=True, methods=['get'])
     def contacts(self, request, pk=None):
         suplier = self.get_object()
         contacts = Contact.objects.filter(suplier=suplier)
-        serializer = ContactSerializer(contacts, many=True)
+        serializer = ContactSerializer(contacts, many=True) 
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
