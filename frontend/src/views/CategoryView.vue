@@ -1,42 +1,7 @@
 
 <template>
   <!------------ALERT----------------->
-  <section class="alert">
-    <div v-if="errorMessage"
-      class="flex items-center w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 absolute right-0">
-      <div class="flex items-center justify-center w-12 bg-red-500" id="alert">
-        <svg class="w-12 h-12 text-white fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M20 3.36667C10.8167 3.36667 3.3667 10.8167 3.3667 20C3.3667 29.1833 10.8167 36.6333 20 36.6333C29.1834 36.6333 36.6334 29.1833 36.6334 20C36.6334 10.8167 29.1834 3.36667 20 3.36667ZM19.1334 33.3333V22.9H13.3334L21.6667 6.66667V17.1H27.25L19.1334 33.3333Z" />
-        </svg>
-      </div>
-
-      <div class="px-4 py-2 -mx-3">
-        <div class="mx-3">
-          <span class="font-semibold text-red-500 dark:text-red-400">Error</span>
-          <p class="text-sm text-gray-600 dark:text-gray-200">{{ errorMessage }}</p>
-        </div>
-      </div>
-    </div>
-
-    <div v-if="successMessage" id="alert-dismiss"
-      class="flex items-center w-full max-w-sm overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800 absolute right-0">
-      <div class="flex items-center justify-center w-12 bg-emerald-500" id="alert">
-        <svg class="w-6 h-6 text-white fill-current" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M20 3.33331C10.8 3.33331 3.33337 10.8 3.33337 20C3.33337 29.2 10.8 36.6666 20 36.6666C29.2 36.6666 36.6667 29.2 36.6667 20C36.6667 10.8 29.2 3.33331 20 3.33331ZM16.6667 28.3333L8.33337 20L10.6834 17.65L16.6667 23.6166L29.3167 10.9666L31.6667 13.3333L16.6667 28.3333Z" />
-        </svg>
-      </div>
-
-      <div class="px-4 py-2 -mx-3">
-        <div class="mx-3">
-          <span class="font-semibold text-red-500 dark:text-emerald-400">Success</span>
-          <p class="text-sm text-gray-600 dark:text-gray-200">{{ successMessage }}</p>
-        </div>
-      </div>
-    </div>
-
-  </section>
+  <TheAlert v-if="isAlertVisible"  :message="alertStore.message" :type="alertStore.type" />
 
   <!------------FORM----------------->
   <section class="max-w-4xl  p-6 mt-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">
@@ -53,7 +18,9 @@
 
       <div class="flex justify-start mt-6">
         <button
-          class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">Cadastrar</button>
+          class="px-8 py-2.5 leading-5 text-white transition-colors duration-300 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
+          {{ editingCategoryId ? 'Atualizar' : 'Cadastrar' }}
+        </button>
       </div>
     </form>
   </section>
@@ -270,10 +237,13 @@
 
 <script>
 import axios from 'axios';
+import { ref } from 'vue';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import { useAlertStore } from '@/stores/alertStore';
 import TheModal from '@/components/TheModal.vue';
 import Pagination from '@/components/ThePagination.vue';
+import TheAlert from '@/components/TheAlert.vue';
 
 
 export default {
@@ -293,10 +263,9 @@ export default {
       name: '',
       editingCategoryId: null,
       editingCategory: {},
-      successMessage: '',
-      errorMessage: '',
-      errorTimeout: null,
-      successTimeout: null,
+      message: '',
+      type: '',
+      isAlertVisible: false,
       showModal: false,
       selectedCategory: {
         data_cadastro: '',
@@ -304,28 +273,28 @@ export default {
       }
     };
   },
+  setup() {
+    const alertStore = useAlertStore();
+    let isAlertVisible = ref(false);
+
+    return { 
+      alertStore, 
+      isAlertVisible     
+    };
+  },
 
   components: {
     TheModal,
-    Pagination
+    Pagination,
+    TheAlert,
   },
-
-  watch: {
-    errorMessage(newMessage) {
-      this.handleMessageUpdate(newMessage, "error");
-    },
-    successMessage(newMessage) {
-      this.handleMessageUpdate(newMessage, "success");
-    },
-  }, 
-
+ 
   mounted() {
-    this.getCategory(this.baseURL);
-    this.setTimers();
+    this.getCategory(this.baseURL);   
   },
 
   methods: {
-    
+
     async getCategory(url) {
       await axios.get(url)
         .then(response => {
@@ -346,43 +315,65 @@ export default {
     },
 
     async addCategory() {
+      const { alertStore } = this;
       await axios.post(this.baseURL, { name: this.name })
         .then(response => {
-          this.successMessage = 'Categoria adicionada.';
+          this.isAlertVisible = true;
+          alertStore.showAlert('Categoria adicionada com sucesso.', 'success')
+          
           this.name = '';
           this.getCategory(this.baseURL);
         })
         .catch(error => {
-          this.errorMessage = `Erro ao incluir a categoria.`
-          console.log(error)
+          if (error.response) {
+            const { data, status } = error.response;
+            this.isAlertVisible = true;
+            alertStore.showAlert(`Erro: ${data.name[0]}`, 'error');
+          } else {
+            this.isAlertVisible = true;
+            alertStore.showAlert('Erro desconhecido ao incluir a categoria', 'error');          
+            console.log(error)
+          }
         });
     },
 
     async updateCategory(id, updatedCategory) {
+      const { alertStore } = this;
       await axios.put(`${this.baseURL}${id}/`, updatedCategory)
         .then(response => {
-          this.successMessage = 'Categoria Atualizada.';
+          this.isAlertVisible = true;
+          alertStore.showAlert('Categoria atualizada com sucesso.', 'success')
           this.name = '';
           this.getCategory(this.baseURL);
           this.cancelEdit()
 
-        })
-        .catch(error => {
-          this.errorMessage = `Erro ao atualizar a categoria.`
-          console.error('Error updating category', error);
+        }).catch(error => {
+          if (error.response) {
+            const { data, status } = error.response;
+            this.isAlertVisible = true;
+            alertStore.showAlert(`Erro: ${data.name[0]}`, 'error');
+          } else {
+            this.isAlertVisible = true;
+            alertStore.showAlert('Erro desconhecido ao atualizar a categoria', 'error');          
+            console.log(error)
+          }
         });
     },
 
     async deleteCategory(id) {
-      await axios.delete(`${this.baseURL}${id}/`)
-        .then(response => {
-          this.successMessage = 'Categoria Excluida.';
+      const { alertStore } = this;
+      const isConfirmed = window.confirm('Tem certeza que deseja excluir esta Categoria?');
+      if (isConfirmed) {
+        try {
+          this.isAlertVisible = true;
+          const response = await axios.delete(`${this.baseURL}${id}/`);
+          alertStore.showAlert('Categoria excluida com sucesso', 'success')
           this.getCategory(this.baseURL);
-        })
-        .catch(error => {
-          this.errorMessage = `Erro ao excluir a categoria.`
-          console.error('Error deleting category', error);
-        });
+        } catch (error) {
+          alertStore.showAlert('Erro ao deletar a categoria', 'error')
+          console.error('Error deleting suplier', error);
+        }
+      }
     },
 
     async created() {
@@ -470,43 +461,9 @@ export default {
     closeModal() {
       this.selectedCategory = {};
       this.showModal = false;
-    },
-
-    setTimers() {
-      setTimeout(() => {
-        this.errorMessage = null;
-      }, 2000);
-      setTimeout(() => {
-        this.successMessage = null;
-      }, 2000);
-    },
-
-    handleMessageUpdate(newMessage, type) {
-      if (newMessage) {
-        setTimeout(() => {
-          if (type === "error") {
-            this.errorMessage = null;
-          } else if (type === "success") {
-            this.successMessage = null;
-          }
-        }, 2000);
-      }
-    },
-
-    displayErrorMessage(message) {
-      this.errorMessage = message;
-    },
-
-    displaySuccessMessage(message) {
-      this.successMessage = message;
-    },
-
+    },  
+   
   },
 };
 </script>
 
-<style scoped>
-#alert {
-  align-self: normal;
-}
-</style>
