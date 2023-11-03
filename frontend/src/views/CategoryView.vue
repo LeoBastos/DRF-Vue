@@ -55,11 +55,6 @@
               <thead class="bg-gray-50 dark:bg-gray-800">
                 <tr>
                   <th scope="col"
-                    class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    Id
-                  </th>
-
-                  <th scope="col"
                     class="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <button class="flex items-center gap-x-3 focus:outline-none" @click="OrderingCategory('name')">
                       <span>Nome</span>
@@ -122,12 +117,7 @@
               </thead>
               <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
 
-                <tr v-for="category in categories" v-bind:key="category.id" :data="filterCategory(search)">
-                  <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
-                    <div>
-                      <h2 class="font-medium text-gray-800 dark:text-white ">{{ category.id }}</h2>
-                    </div>
-                  </td>
+                <tr v-for="category in categories" v-bind:key="category.id" :data="filterCategory(search)">                  
                   <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
                     <h2 class="font-medium text-gray-800 dark:text-white ">{{ category.name }}</h2>
                   </td>
@@ -316,7 +306,7 @@ export default {
 
     async addCategory() {
       const { alertStore } = this;
-      await axios.post(this.baseURL, { name: this.name })
+      await axios.post(this.baseURL, { name: this.titleCase(this.name) })
         .then(response => {
           this.isAlertVisible = true;
           alertStore.showAlert('Categoria adicionada com sucesso.', 'success')
@@ -428,7 +418,7 @@ export default {
     editCategory(category) {
       this.editingCategoryId = category.id;
       this.editingCategory = { ...category };
-      this.name = category.name;
+      this.name = this.titleCase(category.name);
     },
 
     cancelEdit() {
@@ -439,7 +429,7 @@ export default {
 
     submitForm() {
       if (this.editingCategoryId) {
-        this.updateCategory(this.editingCategoryId, { name: this.name });
+        this.updateCategory(this.editingCategoryId, { name: this.titleCase(this.name) });
       } else {
         this.addCategory();
       }
@@ -462,6 +452,12 @@ export default {
       this.selectedCategory = {};
       this.showModal = false;
     },  
+
+    titleCase(str) {
+      return str.toLowerCase().split(' ').map(function (word) {
+        return word.replace(word[0], word[0].toUpperCase());
+      }).join(' ');
+    },
    
   },
 };

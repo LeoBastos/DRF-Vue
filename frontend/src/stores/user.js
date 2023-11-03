@@ -17,12 +17,12 @@ export const useUserStore = defineStore({
 
     actions: {
         initStore() {
-            if (localStorage.getItem('user.access')) {
-                this.user.access = localStorage.getItem('user.access')
-                this.user.refresh = localStorage.getItem('user.refresh')
-                this.user.id = localStorage.getItem('user.id')
-                this.user.name = localStorage.getItem('user.name')
-                this.user.email = localStorage.getItem('user.email')               
+            if (sessionStorage.getItem('user.access')) {
+                this.user.access = sessionStorage.getItem('user.access')
+                this.user.refresh = sessionStorage.getItem('user.refresh')
+                this.user.id = sessionStorage.getItem('user.id')
+                this.user.name = sessionStorage.getItem('user.name')
+                this.user.email = sessionStorage.getItem('user.email')               
                 this.user.isAuthenticated = true
 
                 this.refreshToken()
@@ -34,8 +34,8 @@ export const useUserStore = defineStore({
             this.user.refresh = data.refresh
             this.user.isAuthenticated = true
 
-            localStorage.setItem('user.access', data.access)
-            localStorage.setItem('user.refresh', data.refresh)
+            sessionStorage.setItem('user.access', data.access)
+            sessionStorage.setItem('user.refresh', data.refresh)
         },
 
         removeToken() {
@@ -46,11 +46,11 @@ export const useUserStore = defineStore({
             this.user.name = null
             this.user.email = null
 
-            localStorage.setItem('user.access', '')
-            localStorage.setItem('user.refresh', '')
-            localStorage.setItem('user.id', '')
-            localStorage.setItem('user.name', '')
-            localStorage.setItem('user.email', '')
+            sessionStorage.setItem('user.access', '')
+            sessionStorage.setItem('user.refresh', '')
+            sessionStorage.setItem('user.id', '')
+            sessionStorage.setItem('user.name', '')
+            sessionStorage.setItem('user.email', '')
            
         },
       
@@ -62,7 +62,7 @@ export const useUserStore = defineStore({
                 .then((response) => {
                     this.user.access = response.data.access
 
-                    localStorage.setItem('user.access', response.data.access)
+                    sessionStorage.setItem('user.access', response.data.access)
 
                     axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.access
                 })

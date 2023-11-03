@@ -19,7 +19,7 @@ export const useSuplierStore = defineStore('suplier', {
     setSuplierData(suplier) {
       this.suplierData = { ...this.suplierData, ...suplier };
       this.suplierData.editingSuplierId = suplier.id;
-    },   
+    },    
 
     resetFields() {
       this.suplierData = {

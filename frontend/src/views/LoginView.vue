@@ -78,11 +78,11 @@ export default {
             this.errors = []
 
             if (this.form.email === '') {
-                this.errors.push('Your e-mail is missing')
+                this.errors.push('Preencha o e-mail.')
             }
 
             if (this.form.password === '') {
-                this.errors.push('Your password is missing')
+                this.errors.push('O password não pode estar em branco.')
             }
 
             if (this.errors.length === 0) {
@@ -94,12 +94,12 @@ export default {
 
                         axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.access;
 
-                        this.$router.push('/category')
+                        this.$router.push('/')
                     })
                     .catch(error => {
                         console.log('error', error)
 
-                        this.errors.push('The email or password is incorrect!')
+                        this.errors.push('Email ou password inválido!')
                     })
             }           
         }

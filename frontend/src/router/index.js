@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import ProductView from '../views/ProductView.vue'
-import CategoryView from '../views/CategoryView.vue'
-import SuplierView from '../views/SuplierView.vue'
-import LoginView from '../views/LoginView.vue'
-import FormSuplier from '../components/TheFormSuplier.vue'
+import HomeView from '@/views/HomeView.vue'
+import ProductView from '@/views/ProductView.vue'
+import CategoryView from '@/views/CategoryView.vue'
+import SuplierView from '@/views/SuplierView.vue'
+import LoginView from '@/views/LoginView.vue'
+import FormSuplier from '@/components/TheFormSuplier.vue'
+import FormProduct from '@/components/TheFormProduct.vue'
 import { useUserStore } from '@/stores/user'
 
 
@@ -21,6 +22,11 @@ const router = createRouter({
       path: '/product',
       name: 'produtos',      
       component: ProductView
+    },
+    {
+      path: '/product/add',
+      name: 'cadastro-produto',
+      component: FormProduct
     },
     {
       path: '/category',

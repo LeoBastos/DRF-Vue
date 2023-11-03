@@ -3,19 +3,17 @@
         <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
             <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
                 <template v-if="userStore.user.isAuthenticated">
-                    <RouterLink to="/product" class="mr-5 hover:text-emerald-500 dark:text-white">Produtos</RouterLink>
+                    <RouterLink to="/" class="mr-5 hover:text-emerald-500 dark:text-white">Home</RouterLink>
+                    <RouterLink to="/category" class="mr-5 hover:text-emerald-500 dark:text-white">Categorias</RouterLink>                   
                     <RouterLink to="/suplier" class="mr-5 hover:text-emerald-500 dark:text-white">Fornecedores</RouterLink>
-                    <RouterLink to="/category" class="mr-5 hover:text-emerald-500 dark:text-white">Categorias</RouterLink>
+                    <RouterLink to="/product" class="mr-5 hover:text-emerald-500 dark:text-white">Produtos</RouterLink>
                     <a href="#" class="mr-5 hover:text-emerald-500 dark:text-white" @click="logout">Logout</a>
                 </template>
                 <template v-else>
-                    <RouterLink to="/login" class="mr-5 hover:text-emerald-500 dark:text-white">Login</RouterLink>
+                    <RouterLink to="/" class="mr-5 hover:text-emerald-500 dark:text-white">Login</RouterLink>
                 </template>
             </nav>
         </div>
-        
-
-
     </header>
 </template>
 
