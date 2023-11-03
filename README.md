@@ -10,9 +10,11 @@
 ```
 git clone https://github.com/LeoBastos/DRF-Vue.git
 
+c:\> cd DRF-Vue
+
 ## backend:
 entre no diretório backend do projeto:
-c:\> cd backend
+c:\DRF-Vue> cd backend
 
 python -m venv .venv
 Windows: c:\>venv\Scripts\activate
@@ -28,9 +30,9 @@ python manage.py migrate
 python manage.py createsuperuser
 
 ## frontend:
-c:\> cd frontend
-c:\>frontend> npm install
-c:\> npm run dev
+c:\DRF-Vue> cd frontend
+c:\DRF-Vue\frontend> npm install
+c:\DRF-Vue\frontend> npm run dev
 
 ## Links:
 Admin Django: http://127.0.0.1:8000/admin
