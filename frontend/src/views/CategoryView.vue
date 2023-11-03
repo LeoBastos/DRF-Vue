@@ -407,8 +407,7 @@ export default {
             this.categories.sort((a, b) => a[orderField].localeCompare(b[orderField], undefined, { sensitivity: 'accent' }));
           } else {
             this.categories.sort((a, b) => b[orderField].localeCompare(a[orderField], undefined, { sensitivity: 'accent' }));
-          }
-          console.log(response.data.results);
+          }       
         })
         .catch(error => {
           console.error('Error ordering category', error);

@@ -432,8 +432,7 @@ export default {
             this.supliers.sort((a, b) => a[orderField].localeCompare(b[orderField], undefined, { sensitivity: 'accent' }));
           } else {
             this.supliers.sort((a, b) => b[orderField].localeCompare(a[orderField], undefined, { sensitivity: 'accent' }));
-          }
-          console.log(response.data.results);
+          }         
         })
         .catch(error => {
           console.error('Error ordering category', error);

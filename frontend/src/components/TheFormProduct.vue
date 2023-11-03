@@ -395,8 +395,7 @@ export default {
             };
 
             if (productStore.productData.editingProductId) {
-                updateProduct(productStore.productData.editingProductId, productData);
-                console.log('product data submit', productData)
+                updateProduct(productStore.productData.editingProductId, productData);                
                 productStore.resetFields();
             } else {
                 addProduct(productData);

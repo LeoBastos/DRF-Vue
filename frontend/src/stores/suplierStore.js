@@ -11,7 +11,7 @@ export const useSuplierStore = defineStore('suplier', {
   }),
   actions: {
     addContactField() {
-      this.suplierData.contacts.push({ contact: '' });
+      this.suplierData.contacts.push({ contact: '' });      
     },
     removeContactField(index) {
       this.suplierData.contacts.splice(index, 1);

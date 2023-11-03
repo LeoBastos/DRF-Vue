@@ -88,8 +88,7 @@ export default {
             if (this.errors.length === 0) {
                 await axios
                     .post('/api/token/', this.form)
-                    .then(response => {
-                        console.log(response)
+                    .then(response => {                        
                         this.userStore.setToken(response.data)
 
                         axios.defaults.headers.common["Authorization"] = "Bearer " + response.data.access;

@@ -344,7 +344,7 @@ export default {
 
     editProduct(product) {
       const selectedProduct = this.products.find((p) => p.id === product.id);
-      console.log('leo :', selectedProduct);
+     
       if (selectedProduct) {
         this.productStore.setProductData(selectedProduct);
         this.$router.push({ name: 'cadastro-produto' });
@@ -400,9 +400,7 @@ export default {
     },
     
 
-    openModal(product) {
-      console.log('product ', product)
-      console.log('selected : ', this.selectedProduct)
+    openModal(product) {     
       this.selectedProduct = {
         ...product,
         data_cadastro_formatted: this.formatDate(product.data_cadastro),
