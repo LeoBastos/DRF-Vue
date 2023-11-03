@@ -19,8 +19,7 @@ class AddressSerializer(ModelSerializer):
             "neighborhood",
             "city",
             "state",
-        ]
-        # abstract = True
+        ]        
 
 
 class ContactSerializer(ModelSerializer):
@@ -28,7 +27,7 @@ class ContactSerializer(ModelSerializer):
 
     class Meta:
         model = Contact
-        fields = "__all__"
+        fields = ['id', 'contact', 'suplier']
 
     def get_suplier(self, obj):
         return obj.suplier.name if obj.suplier else None
@@ -66,37 +65,70 @@ class SuplierSerializer(ModelSerializer):
         return value
 
     def create(self, validated_data):
-        contacts_data = validated_data.pop("contacts")
+        contacts_data = validated_data.pop("contacts")        
         suplier = Suplier.objects.create(**validated_data)
         for contact_data in contacts_data:
             Contact.objects.create(suplier=suplier, **contact_data)
         return suplier
-
+    
     def update(self, instance, validated_data):
         contacts_data = validated_data.pop("contacts")
-        contacts = (instance.contacts).all()
+        contacts = instance.contacts.all()
         contacts = list(contacts)
+      
+        for index, contact_data in enumerate(contacts_data):
+            if index < len(contacts):
+                contact = contacts[index]
+                if "id" in contact_data and contact_data["id"] == contact.id:
+                    contact.contact = contact_data.get("contact", contact.contact)
+                    contact.save()
+                else:
+                    new_contact = Contact.objects.create(
+                        contact=contact_data.get("contact"),
+                        suplier=instance
+                    )
+            else:
+                new_contact = Contact.objects.create(
+                    contact=contact_data.get("contact"),
+                    suplier=instance
+                )
 
-        instance.name = validated_data.get("name", instance.name)
-        instance.company_name = validated_data.get(
-            "company_name", instance.company_name
-        )
-        instance.document = validated_data.get("document", instance.document)
-        instance.zipcode = validated_data.get("zipcode", instance.zipcode)
-        instance.street = validated_data.get("street", instance.street)
-        instance.number = validated_data.get("number", instance.number)
-        instance.complement = validated_data.get("complement", instance.complement)
-        instance.neighborhood = validated_data.get(
-            "neighborhood", instance.neighborhood
-        )
-        instance.city = validated_data.get("city", instance.city)
-        instance.state = validated_data.get("state", instance.state)
-        instance.save()
-
-        for contact_data in contacts_data:
-            if contacts:
-                contact = contacts.pop(0)
-                contact.contact = contact_data.get("contact", contact.contact)
-                contact.save()
+        for contact in contacts:
+            contact_id_list = [contact_data.get("id") for contact_data in contacts_data if "id" in contact_data]
+            if contact.id not in contact_id_list:
+                contact.delete()
 
         return instance
+
+        
+
+
+
+    # def update(self, instance, validated_data):
+    #     contacts_data = validated_data.pop("contacts")
+    #     contacts = (instance.contacts).all()
+    #     contacts = list(contacts)
+
+    #     instance.name = validated_data.get("name", instance.name)
+    #     instance.company_name = validated_data.get(
+    #         "company_name", instance.company_name
+    #     )
+    #     instance.document = validated_data.get("document", instance.document)
+    #     instance.zipcode = validated_data.get("zipcode", instance.zipcode)
+    #     instance.street = validated_data.get("street", instance.street)
+    #     instance.number = validated_data.get("number", instance.number)
+    #     instance.complement = validated_data.get("complement", instance.complement)
+    #     instance.neighborhood = validated_data.get(
+    #         "neighborhood", instance.neighborhood
+    #     )
+    #     instance.city = validated_data.get("city", instance.city)
+    #     instance.state = validated_data.get("state", instance.state)
+    #     instance.save()
+
+    #     for contact_data in contacts_data:
+    #         if contacts:
+    #             contact = contacts.pop(0)
+    #             contact.contact = contact_data.get("contact", contact.contact)
+    #             contact.save()
+
+    #     return instance

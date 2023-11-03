@@ -14,9 +14,6 @@ class Address(models.Model):
     def __str__(self) -> str:
         return f'{self.neighborhood} - {self.city} - {self.state}'
 
-    # class Meta:
-    #     abstract = True
-
 
 class Suplier(Address, Model):
     name = models.CharField("Nome Fantasia", max_length=120) 
