@@ -75,6 +75,22 @@ class SuplierSerializer(ModelSerializer):
         contacts_data = validated_data.pop("contacts")
         contacts = instance.contacts.all()
         contacts = list(contacts)
+
+        instance.name = validated_data.get("name", instance.name)
+        instance.company_name = validated_data.get(
+            "company_name", instance.company_name
+        )
+        instance.document = validated_data.get("document", instance.document)
+        instance.zipcode = validated_data.get("zipcode", instance.zipcode)
+        instance.street = validated_data.get("street", instance.street)
+        instance.number = validated_data.get("number", instance.number)
+        instance.complement = validated_data.get("complement", instance.complement)
+        instance.neighborhood = validated_data.get(
+            "neighborhood", instance.neighborhood
+        )
+        instance.city = validated_data.get("city", instance.city)
+        instance.state = validated_data.get("state", instance.state)
+        instance.save()
       
         for index, contact_data in enumerate(contacts_data):
             if index < len(contacts):
@@ -99,36 +115,3 @@ class SuplierSerializer(ModelSerializer):
                 contact.delete()
 
         return instance
-
-        
-
-
-
-    # def update(self, instance, validated_data):
-    #     contacts_data = validated_data.pop("contacts")
-    #     contacts = (instance.contacts).all()
-    #     contacts = list(contacts)
-
-    #     instance.name = validated_data.get("name", instance.name)
-    #     instance.company_name = validated_data.get(
-    #         "company_name", instance.company_name
-    #     )
-    #     instance.document = validated_data.get("document", instance.document)
-    #     instance.zipcode = validated_data.get("zipcode", instance.zipcode)
-    #     instance.street = validated_data.get("street", instance.street)
-    #     instance.number = validated_data.get("number", instance.number)
-    #     instance.complement = validated_data.get("complement", instance.complement)
-    #     instance.neighborhood = validated_data.get(
-    #         "neighborhood", instance.neighborhood
-    #     )
-    #     instance.city = validated_data.get("city", instance.city)
-    #     instance.state = validated_data.get("state", instance.state)
-    #     instance.save()
-
-    #     for contact_data in contacts_data:
-    #         if contacts:
-    #             contact = contacts.pop(0)
-    #             contact.contact = contact_data.get("contact", contact.contact)
-    #             contact.save()
-
-    #     return instance
