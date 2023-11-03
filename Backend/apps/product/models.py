@@ -12,12 +12,12 @@ class Product(Model):
         unique=True,
         error_messages={"unique": "Um produto com este nome já foi Cadastrado."},
     )
-    description = models.TextField("Descrição", null=True, blank=True)
+    description = models.TextField("Descrição", max_length=255, null=True, blank=True)
     category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, related_name="products"
+        Category, on_delete=models.PROTECT, related_name="products"
     )
     supliers = models.ManyToManyField(
-        Suplier, related_name="products"
+        'SuplierProduct', related_name="products"
     )  # through="SuplierProduct"
 
     class Meta:
@@ -42,7 +42,7 @@ class Product(Model):
             raise ValidationError(error_messages)
 
 
-class SuplierProduct(models.Model):
+class SuplierProduct(Model):
     product = models.ForeignKey(
         Product,
         verbose_name="Produto",
@@ -53,7 +53,7 @@ class SuplierProduct(models.Model):
         Suplier,
         verbose_name="Fornecedor",
         on_delete=models.CASCADE,
-        related_name="suplierproducts",
+        related_name="suplierproducts", 
     )
     price = models.DecimalField("Preço de Custo", max_digits=9, decimal_places=2)
 
@@ -63,4 +63,4 @@ class SuplierProduct(models.Model):
         ordering = ["suplier"]
 
     def __str__(self):
-        return f"{self.product.name} - {self.suplier.name} - {self.price}"
+        return f"{self.pk} - {self.product.name} - {self.suplier.name} - {self.price}"

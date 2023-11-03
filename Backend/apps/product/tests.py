@@ -5,7 +5,7 @@ from apps.product.models import Product, Category, Suplier, SuplierProduct
 from django.core.exceptions import ValidationError
 from apps.product.serializers import ProductSerializer
 
-#TODO Efetuar os testes de model, view e serializer dos apps.
+
 
 class ProductModelTest(TestCase):
     def setUp(self):

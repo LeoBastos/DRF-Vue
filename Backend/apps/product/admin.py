@@ -4,6 +4,7 @@ from apps.product.models import Product, SuplierProduct
 
 
 class SuplierProductInline(admin.TabularInline):
+    list_display = ['id', 'product', 'suplier', 'price']
     model = SuplierProduct
     extra = 3
 

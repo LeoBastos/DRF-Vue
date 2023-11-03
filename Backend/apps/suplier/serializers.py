@@ -33,8 +33,7 @@ class ContactSerializer(ModelSerializer):
     def get_suplier(self, obj):
         return obj.suplier.name if obj.suplier else None
 
-# TODO
-##  Validador de  CNPJ
+
 class SuplierSerializer(ModelSerializer):
     contacts = ContactSerializer(many=True)
 
@@ -54,11 +53,16 @@ class SuplierSerializer(ModelSerializer):
             "state",
             "contacts",
         ]
-        depth = 1
+        
 
     def validate_document(self, value):
         if len(value) != 14:
             raise ValidationError("O campo CNPJ deve ter 14 dígitos.")
+        return value
+    
+    def validate_contact(self, value):
+        if len(value) != 11:
+            raise ValidationError("Contato deve ter 11 dígitos.")
         return value
 
     def create(self, validated_data):
