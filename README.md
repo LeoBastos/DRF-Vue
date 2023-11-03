@@ -40,4 +40,14 @@ Api Swagger: http://127.0.0.1:8000/api/swagger
 
 ```
 
+# :camera: Screenshots
+<div align="center">    
+   <img src="imagens/login.png" width="400px">
+   <img src="imagens/home.png" width="400px">
+   <img src="imagens/categorias.png" width="400px">   
+  <img src="imagens/fornecedores.png" width="400px">
+   <img src="imagens/form_fornecedores.png" width="400px">   
+  <img src="imagens/produtos.png" width="400px">
+   <img src="imagens/form_cad_prod.png" width="400px">   
+</div>
 
