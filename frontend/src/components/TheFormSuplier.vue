@@ -131,7 +131,7 @@ export default {
 
         const updateSuplier = async (id, updatedSuplier) => {
             try {
-                const response = await axios.put(`/api/fornecedores/${id}/`, updatedSuplier);              
+                const response = await axios.put(`/api/fornecedores/${id}/`, updatedSuplier);     
                 suplierStore.setSuplierData(response.data);
                 alertStore.showAlert('Fornecedor atualizado com sucesso', 'success')
                 suplierStore.resetFields();
